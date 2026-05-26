@@ -1,68 +1,122 @@
 <script setup lang="ts">
-import { Download } from 'lucide-vue-next'
+import { ref, computed, type ComponentPublicInstance } from 'vue'
+import { useRouter } from 'vue-router'
 import { LoginForm, useLoginStore } from '@/domains/auth/features/login-by-password'
+import { ForgotPasswordForm } from '@/domains/auth/features/forgot-password'
+import { SmsCodeForm } from '@/domains/auth/features/sms-verify'
 
 const store = useLoginStore()
+const router = useRouter()
+const view = ref<'login' | 'forgot-password' | 'sms-verify'>('login')
+const forgotRef = ref<ComponentPublicInstance & { email: string; sent: boolean } | null>(null)
+
+const title = computed(() => {
+  if (view.value === 'forgot-password') return 'Восстановление пароля'
+  if (view.value === 'sms-verify') return 'Введите код из СМС'
+  return 'Вход'
+})
+
+const subtitle = computed(() => {
+  if (view.value === 'forgot-password') {
+    if (forgotRef.value?.sent) {
+      return { text: 'Письмо отправлено на ', email: forgotRef.value.email }
+    }
+    return { text: 'Отправим письмо со ссылкой для восстановления' }
+  }
+  if (view.value === 'sms-verify') {
+    return { text: 'Отправили на номер ', phone: '+7 901 ***-**-19' }
+  }
+  return null
+})
+
+const showBack = computed(() => view.value !== 'login')
+
+function handleBack() {
+  if (view.value === 'forgot-password') {
+    if (forgotRef.value) store.email = forgotRef.value.email
+    view.value = 'login'
+  } else {
+    view.value = 'login'
+  }
+}
 </script>
 
 <template>
-  <div class="flex min-h-screen">
+  <div class="flex h-dvh">
     <!-- Left panel -->
-    <div class="flex w-72 shrink-0 flex-col bg-white px-8 py-12 lg:w-96">
-      <!-- Logo -->
-      <img src="@/shared/assets/logo-mr-group.svg" alt="MR Group" class="h-8 w-auto" />
+    <div class="w-full overflow-y-auto bg-white lg:w-5/12">
+      <div class="mx-auto w-full max-w-sm px-8 pt-[160px] pb-12 lg:px-0 flex flex-col gap-10">
 
-      <!-- Form centered -->
-      <div class="flex flex-1 flex-col justify-center">
-        <LoginForm />
-      </div>
+        <!-- Лого -->
+        <img src="@/shared/assets/logo-mr-group.svg" alt="MR Group" class="h-[48px] w-auto self-start" />
 
-      <!-- Toggle at bottom -->
-      <div class="flex items-center justify-between gap-3">
-        <div>
-          <p class="text-sm font-medium text-zinc-900">Работаю на чужом компьютере</p>
-          <p class="text-xs text-zinc-500">Не запоминать e-mail и пароль</p>
-        </div>
-        <button
-          type="button"
-          :class="[
-            'relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none',
-            store.isGuestDevice ? 'bg-zinc-900' : 'bg-zinc-200',
-          ]"
-          role="switch"
-          :aria-checked="store.isGuestDevice"
-          @click="store.toggleGuestDevice()"
-        >
-          <span
-            :class="[
-              'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
-              store.isGuestDevice ? 'translate-x-5' : 'translate-x-0',
-            ]"
+        <!-- Заголовок + подзаголовок + форма -->
+        <div class="flex flex-col gap-6">
+          <!-- Заголовок + подзаголовок: 12px между ними -->
+          <div class="flex flex-col gap-2">
+            <h1 class="text-2xl font-semibold text-zinc-900">{{ title }}</h1>
+            <p v-if="subtitle" class="text-sm font-light text-zinc-500">
+              <template v-if="subtitle.email">
+                Письмо отправлено на <span class="font-medium text-zinc-900">{{ subtitle.email }}</span>. Проверьте почту.
+              </template>
+              <template v-else-if="subtitle.phone">
+                Отправили на номер <span class="text-zinc-900">{{ subtitle.phone }}</span>
+              </template>
+              <template v-else>{{ subtitle.text }}</template>
+            </p>
+          </div>
+
+          <LoginForm
+            v-if="view === 'login'"
+            @forgot-password="view = 'forgot-password'"
+            @submit="view = 'sms-verify'"
           />
+          <ForgotPasswordForm
+            v-else-if="view === 'forgot-password'"
+            ref="forgotRef"
+          />
+          <SmsCodeForm
+            v-else
+            @back="view = 'login'"
+            @success="router.push('/applications')"
+          />
+        </div>
+
+        <!-- Вернуться / Тогл -->
+        <button
+          v-if="showBack"
+          type="button"
+          class="flex items-center gap-1.5 self-start text-sm text-zinc-900 hover:text-zinc-500 transition-colors"
+          @click="handleBack"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Вернуться
         </button>
+
       </div>
     </div>
 
     <!-- Right panel (desktop only) -->
-    <div class="relative hidden flex-1 items-center justify-center overflow-hidden bg-[#FF5C00] lg:flex">
-      <!-- Diagonal stripes -->
-      <div class="absolute inset-0 overflow-hidden">
-        <div class="absolute -inset-10 flex gap-10 -rotate-12">
-          <div v-for="i in 14" :key="i" class="h-[200%] w-10 bg-white/10" />
-        </div>
-      </div>
+    <div class="group relative hidden flex-1 items-center justify-center overflow-hidden lg:flex">
+      <!-- Background image -->
+      <img
+        src="@/shared/assets/login-bg.png"
+        class="absolute inset-0 h-full w-full object-cover"
+        alt=""
+      />
 
       <!-- Content -->
       <div class="relative z-10 max-w-2xl space-y-6 px-12 text-center text-white">
-        <span class="inline-block rounded-full border border-white px-4 py-1 text-sm">
+        <span class="inline-block rounded-full border border-white/80 px-4 py-1 text-sm font-normal transition-transform duration-500 group-hover:-rotate-[5deg]">
           исследование ДВИЖа
         </span>
-        <h2 class="text-5xl font-bold leading-tight">Синдром одного банка</h2>
-        <p class="text-xl">на чем вы теряете до 15% продаж</p>
+        <h2 class="text-7xl font-bold leading-none transition-transform duration-500 group-hover:-rotate-[5deg]">Синдром одного банка</h2>
+        <p class="text-2xl font-normal text-white/60 transition-transform duration-500 group-hover:-rotate-[5deg]">на чем вы теряете до 15% продаж</p>
         <button
-          class="inline-flex items-center gap-2 rounded-xl bg-neutral-700 px-6 py-3 text-white transition-colors hover:bg-neutral-600"
+          class="inline-flex items-center justify-center rounded-xl bg-neutral-700 px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-600"
         >
-          <Download :size="16" />
           Скачать
         </button>
       </div>
