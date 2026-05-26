@@ -31,7 +31,7 @@ const store = useLoginStore()
           ]"
           role="switch"
           :aria-checked="store.isGuestDevice"
-          @click="store.isGuestDevice = !store.isGuestDevice"
+          @click="store.toggleGuestDevice()"
         >
           <span
             :class="[
@@ -57,7 +57,7 @@ const store = useLoginStore()
         <span class="inline-block rounded-full border border-white px-4 py-1 text-sm">
           исследование ДВИЖа
         </span>
-        <h1 class="text-5xl font-bold leading-tight">Синдром одного банка</h1>
+        <h2 class="text-5xl font-bold leading-tight">Синдром одного банка</h2>
         <p class="text-xl">на чем вы теряете до 15% продаж</p>
         <button
           class="inline-flex items-center gap-2 rounded-xl bg-neutral-700 px-6 py-3 text-white transition-colors hover:bg-neutral-600"

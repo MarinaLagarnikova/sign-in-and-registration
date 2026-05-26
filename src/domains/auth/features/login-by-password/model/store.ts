@@ -22,5 +22,9 @@ export const useLoginStore = defineStore('loginByPassword', () => {
     }
   }
 
-  return { email, password, isGuestDevice, isLoading, error, login }
+  function toggleGuestDevice() {
+    isGuestDevice.value = !isGuestDevice.value
+  }
+
+  return { email, password, isGuestDevice, isLoading, error, login, toggleGuestDevice }
 })
