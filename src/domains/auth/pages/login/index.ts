@@ -1,2 +1,1 @@
-import { defineComponent } from 'vue'
-export default defineComponent({ template: '<div>Login</div>' })
+export { default } from './ui/LoginPage.vue'
