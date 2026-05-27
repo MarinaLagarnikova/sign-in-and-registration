@@ -9,7 +9,7 @@ defineEmits<{ 'update:modelValue': [value: boolean] }>()
     role="switch"
     :aria-checked="modelValue"
     :class="[
-      'relative isolate inline-flex h-6 w-10 sm:h-5 sm:w-8 cursor-pointer rounded-full p-[3px] transition duration-200 ease-in-out',
+      'relative isolate inline-flex h-6 w-10 sm:h-5 sm:w-8 cursor-default rounded-full p-[3px] transition duration-200 ease-in-out',
       'ring-1 ring-inset focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500',
       modelValue
         ? 'bg-zinc-900 ring-zinc-950/90'

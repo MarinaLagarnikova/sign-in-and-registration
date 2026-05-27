@@ -57,13 +57,13 @@ const showPassword = ref(false)
 
     <div class="flex flex-col gap-6">
       <div class="flex items-center justify-between gap-3">
-        <p class="text-sm text-zinc-900">Не запоминать e-mail и пароль</p>
+        <p class="text-sm text-zinc-900 cursor-default" @click="store.toggleGuestDevice()">Не запоминать e-mail и пароль</p>
         <AppSwitch :model-value="store.isGuestDevice" @update:model-value="store.toggleGuestDevice()" />
       </div>
 
       <button
         type="submit"
-        :disabled="store.isLoading"
+        :disabled="store.isLoading || !store.email || !store.password"
         class="flex items-center justify-center gap-2 w-full rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-zinc-700 disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-zinc-900/40"
       >
         <svg v-if="store.isLoading" class="size-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

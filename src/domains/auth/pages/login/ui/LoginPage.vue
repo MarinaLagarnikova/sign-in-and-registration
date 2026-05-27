@@ -109,11 +109,13 @@ function handleBack() {
 
       <!-- Content -->
       <div class="relative z-10 max-w-2xl space-y-6 px-12 text-center text-white">
-        <span class="inline-block rounded-full border border-white/80 px-4 py-1 text-sm font-normal transition-transform duration-500 group-hover:-rotate-[5deg]">
-          исследование ДВИЖа
-        </span>
-        <h2 class="text-7xl font-bold leading-none transition-transform duration-500 group-hover:-rotate-[5deg]">Синдром одного банка</h2>
-        <p class="text-2xl font-normal text-white/60 transition-transform duration-500 group-hover:-rotate-[5deg]">на чем вы теряете до 15% продаж</p>
+        <div class="flex flex-col gap-6 transition-transform duration-500 group-hover:-rotate-[5deg]">
+          <span class="self-center rounded-full border border-white/80 px-4 py-1 text-sm font-normal">
+            исследование ДВИЖа
+          </span>
+          <h2 class="text-7xl font-bold leading-none">Синдром одного банка</h2>
+          <p class="text-2xl font-normal text-white/60">на чем вы теряете до 15% продаж</p>
+        </div>
         <button
           class="inline-flex items-center justify-center rounded-xl bg-neutral-700 px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-600"
         >
