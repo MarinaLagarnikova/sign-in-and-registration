@@ -51,7 +51,7 @@ function handleBack() {
         <img src="@/shared/assets/logo-mr-group.svg" alt="MR Group" class="h-[48px] w-auto self-start" />
 
         <!-- Контент-блок с фиксированной минимальной высотой = самый длинный сценарий -->
-        <div class="flex flex-col gap-6 min-h-[400px] sm:min-h-[396px]">
+        <div class="flex flex-col gap-6 min-h-[400px] sm:min-h-[404px]">
           <!-- Заголовок + подзаголовок -->
           <div class="flex flex-col gap-2">
             <h1 class="text-2xl font-semibold text-zinc-900">{{ title }}</h1>
