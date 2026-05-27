@@ -44,15 +44,15 @@ function handleBack() {
 <template>
   <div class="flex h-dvh">
     <!-- Left panel -->
-    <div class="w-full overflow-y-auto bg-white lg:w-5/12">
-      <div class="mx-auto w-full max-w-sm px-8 pt-[160px] pb-12 lg:px-0 flex flex-col gap-10">
+    <div class="w-full overflow-y-auto bg-white lg:w-5/12 flex flex-col justify-center">
+      <div class="mx-auto w-full max-w-sm px-8 lg:px-0 flex flex-col gap-10 py-12">
 
         <!-- Лого -->
         <img src="@/shared/assets/logo-mr-group.svg" alt="MR Group" class="h-[48px] w-auto self-start" />
 
-        <!-- Заголовок + подзаголовок + форма -->
-        <div class="flex flex-col gap-6">
-          <!-- Заголовок + подзаголовок: 12px между ними -->
+        <!-- Контент-блок с фиксированной минимальной высотой = самый длинный сценарий -->
+        <div class="flex flex-col gap-6 min-h-[400px] sm:min-h-[396px]">
+          <!-- Заголовок + подзаголовок -->
           <div class="flex flex-col gap-2">
             <h1 class="text-2xl font-semibold text-zinc-900">{{ title }}</h1>
             <p v-if="subtitle" class="text-sm font-light text-zinc-500">
@@ -80,20 +80,19 @@ function handleBack() {
             @back="view = 'login'"
             @success="router.push('/applications')"
           />
-        </div>
 
-        <!-- Вернуться / Тогл -->
-        <button
-          v-if="showBack"
-          type="button"
-          class="flex items-center gap-1.5 self-start text-sm text-zinc-900 hover:text-zinc-500 transition-colors"
-          @click="handleBack"
-        >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Вернуться
-        </button>
+          <!-- Кнопка "Вернуться" — всегда занимает место, invisible когда не нужна -->
+          <button
+            type="button"
+            :class="['flex items-center gap-1.5 self-start text-sm text-zinc-900 hover:text-zinc-500 transition-colors', !showBack && 'invisible']"
+            @click="handleBack"
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Вернуться
+          </button>
+        </div>
 
       </div>
     </div>

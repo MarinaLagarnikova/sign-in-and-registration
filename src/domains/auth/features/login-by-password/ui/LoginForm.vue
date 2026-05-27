@@ -75,8 +75,7 @@ const showPassword = ref(false)
 
       <button
         type="button"
-        class="self-start text-sm font-normal text-zinc-900 transition-colors hover:text-zinc-500"
-        style="text-decoration-line: underline; text-decoration-style: solid; text-decoration-skip-ink: none; text-decoration-color: #A1A1AA; text-decoration-thickness: auto; text-underline-offset: 23%; text-underline-position: from-font;"
+        class="self-center text-sm text-zinc-900 transition-colors hover:text-zinc-500"
         @click="emit('forgotPassword')"
       >
         Не помню пароль
